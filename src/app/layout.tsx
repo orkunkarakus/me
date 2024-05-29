@@ -6,6 +6,7 @@ import { Box, Flex, Theme } from '@radix-ui/themes';
 import { ThemeProvider } from 'next-themes';
 import { twMerge } from 'tailwind-merge';
 import Header from '../components/Header';
+import Analytics from '../components/Analytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
 	<html lang="en">
+		<Analytics />
 		<body className={twMerge(inter.className, 'min-h-screen')}>
 			<ThemeProvider attribute="class">
 				<Theme>

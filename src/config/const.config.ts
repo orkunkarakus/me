@@ -1,3 +1,7 @@
-const CONST = {};
+const CONST = {
+	GOOGLE_ANALYTICS: {
+		ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID
+	}
+};
 
 export default CONST;
