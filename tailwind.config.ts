@@ -8,6 +8,9 @@ const config: Config = {
 		'./src/app/**/*.{js,ts,jsx,tsx,mdx}'
 	],
 	theme: {
+		boxShadow: {
+			header: '0 5px 8px -1px rgba(0, 0, 0, 0.1)'
+		},
 		extend: {
 			animation: {
 				'scale-in': 'scale-in 1s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -61,6 +64,9 @@ const config: Config = {
 					'0%': { opacity: '0', transform: 'translateX(-50px)' },
 					'100%': { opacity: '1', transform: 'translateX(0)' }
 				}
+			},
+			scale: {
+				'102': '1.02'
 			}
 		},
 		fontFamily: {

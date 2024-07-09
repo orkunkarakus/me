@@ -5,8 +5,10 @@ import '@radix-ui/themes/styles.css';
 import { Box, Flex, Theme } from '@radix-ui/themes';
 import { ThemeProvider } from 'next-themes';
 import { twMerge } from 'tailwind-merge';
+
 import Header from '../components/Header';
 import Analytics from '../components/Analytics';
+import ProgressProvider from '../components/ProgressBar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,14 +23,19 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
 		<body className={twMerge(inter.className, 'min-h-screen')}>
 			<ThemeProvider attribute="class">
 				<Theme>
-					<Flex direction="column" className={twMerge('min-h-dvh')}>
-						<Box className={twMerge('p-8', 'fixed', 'w-full')}>
-							<Header />
-						</Box>
-						<Flex direction="column" className={twMerge('p-4', 'flex-1')}>
-							{children}
+					<ProgressProvider>
+						<Flex direction="column" className={twMerge('min-h-dvh')}>
+							<Box
+								className={twMerge('fixed', 'w-full', 'z-50')}
+								style={{ backgroundColor: 'var(--color-background)' }}
+							>
+								<Header />
+							</Box>
+							<Flex direction="column" className={twMerge('p-4', 'flex-1')}>
+								{children}
+							</Flex>
 						</Flex>
-					</Flex>
+					</ProgressProvider>
 				</Theme>
 			</ThemeProvider>
 		</body>

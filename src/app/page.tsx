@@ -80,6 +80,25 @@ const Home = () => (
 				</Link>
 			))}
 		</Flex>
+		<a href="/blog" className={twMerge('hover:scale-105', 'animate-scale-in')}>
+			<span
+				className={twMerge(
+					'border-dashed',
+					'border-2',
+					'p-2',
+					'px-5',
+					'rounded-lg',
+					'border-gray-300 dark:border-gray-600 hover:border-sky-700',
+					'cursor-pointer',
+					'text-gray-600',
+					'hover:text-sky-700',
+					'font-medium',
+					'text-md'
+				)}
+			>
+				Blog
+			</span>
+		</a>
 	</Flex>
 );
 
