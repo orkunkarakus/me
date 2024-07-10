@@ -8,7 +8,7 @@ const BlogLayout = ({ children }: { children: ReactNode }) => (
 		className={twMerge(
 			'p-4',
 			'flex-1',
-			'pt-24',
+			'pt-10',
 			'max-w-screen-lg',
 			'mx-auto',
 			'w-full'
