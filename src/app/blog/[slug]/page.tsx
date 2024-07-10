@@ -14,8 +14,14 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 	const { push } = useRouter();
 
 	const image = useMemo(
-		() => data?.mainImage?.image?.asset?._ref,
-		[data?.mainImage?.image?.asset?._ref]
+		() =>
+			data?.mainImage?.image?.asset?._ref
+				? {
+						img: data?.mainImage?.image?.asset?._ref,
+						alt: data?.mainImage?.alt
+				  }
+				: undefined,
+		[data?.mainImage]
 	);
 
 	const fetch = useCallback(async () => {
@@ -96,8 +102,8 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 			</span>
 			{image && (
 				<Image
-					alt={`${data?._id}-img`}
-					src={getImageUrl(image).url()}
+					alt={image.alt || `${data?._id}-img`}
+					src={getImageUrl(image.img).url()}
 					width="100%"
 					style={{ objectFit: 'contain', maxHeight: 500 }}
 					className={twMerge('rounded-md', 'animate-fade-up')}

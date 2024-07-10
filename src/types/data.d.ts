@@ -5,6 +5,7 @@ export type Data = {
 	tags?: string[];
 	title: string;
 	mainImage?: {
+		alt?: string;
 		image?: {
 			asset?: {
 				_ref: string;
