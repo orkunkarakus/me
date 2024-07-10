@@ -16,11 +16,12 @@
 		"framer-motion": "^11.0.25",
 		"groq": "^3.49.0",
 		"next": "14.1.4",
+		"next-nprogress-bar": "2.3.12",
 		"next-sanity": "^9.4.2",
 		"next-themes": "^0.3.0",
-		"next-nprogress-bar": "2.3.12",
 		"react": "^18",
 		"react-dom": "^18",
+		"react-medium-image-zoom": "^5.2.7",
 		"tailwind-merge": "^2.2.2"
 	},
 	"devDependencies": {

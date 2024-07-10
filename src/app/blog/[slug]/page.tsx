@@ -7,6 +7,7 @@ import { getBlogPost, getImageUrl } from '../../../utils/posts';
 import getTagColor from '../../../utils/getTagColor';
 import type { Data } from '../../../types/data';
 import CustomPortableText from '../../../components/PortableText';
+import Image from '../../../components/Image';
 
 const BlogPage = ({ params }: { params: { slug: string } }) => {
 	const [data, setData] = useState<Data>();
@@ -94,7 +95,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 				{new Date(data?._createdAt as string).toLocaleDateString()}
 			</span>
 			{image && (
-				<img
+				<Image
 					alt={`${data?._id}-img`}
 					src={getImageUrl(image).url()}
 					width="100%"
