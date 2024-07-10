@@ -98,7 +98,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 					alt={`${data?._id}-img`}
 					src={getImageUrl(image).url()}
 					width="100%"
-					style={{ objectFit: 'cover', maxHeight: 500 }}
+					style={{ objectFit: 'contain', maxHeight: 500 }}
 					className={twMerge('rounded-md', 'animate-fade-up')}
 				/>
 			)}
