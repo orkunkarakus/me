@@ -64,7 +64,7 @@ const BlogItem = (props: Props) => {
 						</span>
 					))}
 				</div>
-				<h2
+				<span
 					className={twMerge(
 						'text-md',
 						'dark:text-white',
@@ -73,7 +73,7 @@ const BlogItem = (props: Props) => {
 					)}
 				>
 					{title}
-				</h2>
+				</span>
 				<span
 					className={twMerge('text-sm', 'dark:text-gray-600', 'text-gray-400')}
 				>

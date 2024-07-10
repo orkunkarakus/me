@@ -26,7 +26,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
 					<ProgressProvider>
 						<Flex direction="column" className={twMerge('min-h-dvh')}>
 							<Box
-								className={twMerge('fixed', 'w-full', 'z-50')}
+								className={twMerge('fixed', 'w-full', 'z-50', 'top-0')}
 								style={{ backgroundColor: 'var(--color-background)' }}
 							>
 								<Header />
