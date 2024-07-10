@@ -31,7 +31,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
 							>
 								<Header />
 							</Box>
-							<Flex direction="column" className={twMerge('p-4', 'flex-1')}>
+							<Flex
+								direction="column"
+								className={twMerge('p-4', 'pt-16', 'flex-1')}
+							>
 								{children}
 							</Flex>
 						</Flex>
