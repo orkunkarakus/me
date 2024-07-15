@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import qs from 'qs';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import { getImageUrl } from '../../../utils/posts';
 import Image from '../../../components/Image';
 import fetcher from '../../../utils/fetcher';
 import type { Post } from '../../../types/data';
 import generateSrcSet from '../../../utils/generateSrcSet';
+import generateImgLinks from '../../../utils/generateImgLinks';
 
 const query = (slug: string) =>
 	qs.stringify(
@@ -122,7 +122,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 						data.attributes?.mainImage.data.attributes.alternativeText ||
 						`${data.id}-img`
 					}
-					src={getImageUrl(data.attributes.mainImage.data.attributes.url)}
+					src={generateImgLinks(data.attributes.mainImage.data.attributes.url)}
 					srcSet={generateSrcSet({
 						...data.attributes.mainImage.data.attributes.formats,
 						base: {
