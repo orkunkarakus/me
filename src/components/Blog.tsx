@@ -2,22 +2,22 @@
 
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
-import { getImageUrl } from '../utils/posts';
-import getTagColor from '../utils/getTagColor';
+import type { Category } from '../types/data';
 
 type Props = {
-	id: string;
+	id: number | string;
 	title: string;
 	createdAt: string;
-	// eslint-disable-next-line react/require-default-props
-	img?: string;
 	slug: string;
-	// eslint-disable-next-line react/require-default-props
-	tags?: string[];
+	img: {
+		base: string;
+		srcSet: string;
+	};
+	categories: Category[];
 };
 
 const BlogItem = (props: Props) => {
-	const { id, title, createdAt, img, slug, tags = [] } = props;
+	const { id, title, createdAt, img, slug, categories = [] } = props;
 
 	return (
 		<Link href={`/blog/${slug}`}>
@@ -33,7 +33,7 @@ const BlogItem = (props: Props) => {
 				{img && (
 					<img
 						alt={`${id}-img`}
-						src={getImageUrl(img).url()}
+						src={img.base}
 						width="100%"
 						style={{ objectFit: 'cover', height: 260 }}
 						className={twMerge(
@@ -43,12 +43,13 @@ const BlogItem = (props: Props) => {
 							'ease-in-out',
 							'duration-300'
 						)}
+						srcSet={img.srcSet}
 					/>
 				)}
 				<div
 					className={twMerge('flex', 'flex-row', 'gap-3', 'flex-wrap', 'mt-1')}
 				>
-					{tags.map((tag) => (
+					{categories.map((cat) => (
 						<span
 							className={twMerge(
 								'text-md',
@@ -57,10 +58,10 @@ const BlogItem = (props: Props) => {
 								'font-semibold',
 								'whitespace-nowrap'
 							)}
-							key={tag}
-							style={{ color: getTagColor(tag) }}
+							key={cat.attributes.slug}
+							style={{ color: cat.attributes.color }}
 						>
-							{tag}
+							{cat.attributes.title}
 						</span>
 					))}
 				</div>

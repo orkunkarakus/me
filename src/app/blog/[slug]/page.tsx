@@ -1,46 +1,62 @@
 'use client';
 
 import { twMerge } from 'tailwind-merge';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { getBlogPost, getImageUrl } from '../../../utils/posts';
-import getTagColor from '../../../utils/getTagColor';
-import type { Data } from '../../../types/data';
-import CustomPortableText from '../../../components/PortableText';
+import useSWR from 'swr';
+import qs from 'qs';
+import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import { getImageUrl } from '../../../utils/posts';
 import Image from '../../../components/Image';
+import fetcher from '../../../utils/fetcher';
+import type { Post } from '../../../types/data';
+import generateSrcSet from '../../../utils/generateSrcSet';
 
-const BlogPage = ({ params }: { params: { slug: string } }) => {
-	const [data, setData] = useState<Data>();
-	const { push } = useRouter();
-
-	const image = useMemo(
-		() =>
-			data?.mainImage?.image?.asset?._ref
-				? {
-						img: data?.mainImage?.image?.asset?._ref,
-						alt: data?.mainImage?.alt
-				  }
-				: undefined,
-		[data?.mainImage]
+const query = (slug: string) =>
+	qs.stringify(
+		{
+			filters: {
+				slug: {
+					$eq: slug
+				}
+			},
+			fields: ['title', 'slug', 'createdAt', 'updatedAt', 'content'],
+			populate: {
+				categories: {
+					fields: ['title', 'slug', 'color']
+				},
+				mainImage: {
+					fields: ['alternativeText', 'formats', 'url', 'width', 'height']
+				}
+			}
+		},
+		{
+			encodeValuesOnly: true
+		}
 	);
 
-	const fetch = useCallback(async () => {
-		if (params?.slug) {
-			const res = await getBlogPost(params.slug);
-			if (!res?.length) {
-				push('/blog');
+const BlogPage = ({ params }: { params: { slug: string } }) => {
+	const {
+		data: post,
+		isLoading,
+		error
+	} = useSWR(`/api/posts?${query(params?.slug)}`, fetcher);
+	const { push } = useRouter();
 
-				return;
-			}
-			setData(res[0]);
-		}
-	}, [params.slug, push]);
+	const data = useMemo<Post>(
+		() => (post?.data?.length ? post?.data[0] : undefined),
+		[post]
+	);
 
 	useEffect(() => {
-		fetch();
-	}, [fetch]);
+		if (!isLoading) {
+			if (!data || error) {
+				push('/blog');
+			}
+		}
+	}, [data, error, isLoading, push]);
 
-	if (!data) {
+	if (isLoading || !data) {
 		return (
 			<div className="animate-pulse">
 				<div className="flex flex-col gap-8 items-center">
@@ -61,7 +77,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 	return (
 		<div className={twMerge('flex', 'flex-col', 'gap-4', 'items-center')}>
 			<div className={twMerge('flex', 'flex-row', 'gap-3', 'flex-wrap')}>
-				{data?.tags?.map((tag) => (
+				{data.attributes.categories.data.map((cat) => (
 					<span
 						className={twMerge(
 							'text-md',
@@ -71,10 +87,10 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 							'whitespace-nowrap',
 							'animate-fade-in'
 						)}
-						key={tag}
-						style={{ color: getTagColor(tag) }}
+						key={cat.attributes.slug}
+						style={{ color: cat.attributes.color }}
 					>
-						{tag}
+						{cat.attributes.title}
 					</span>
 				))}
 			</div>
@@ -88,7 +104,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 					'animate-fade-up'
 				)}
 			>
-				{data?.title}
+				{data.attributes.title}
 			</h1>
 			<span
 				className={twMerge(
@@ -98,18 +114,31 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 					'animate-fade-in'
 				)}
 			>
-				{new Date(data?._createdAt as string).toLocaleDateString()}
+				{new Date(data.attributes.createdAt as string).toLocaleDateString()}
 			</span>
-			{image && (
+			{data.attributes?.mainImage && (
 				<Image
-					alt={image.alt || `${data?._id}-img`}
-					src={getImageUrl(image.img).url()}
+					alt={
+						data.attributes?.mainImage.data.attributes.alternativeText ||
+						`${data.id}-img`
+					}
+					src={getImageUrl(data.attributes.mainImage.data.attributes.url)}
+					srcSet={generateSrcSet({
+						...data.attributes.mainImage.data.attributes.formats,
+						base: {
+							width: data.attributes.mainImage.data.attributes.width,
+							url: data.attributes.mainImage.data.attributes.url,
+							height: data.attributes.mainImage.data.attributes.height
+						}
+					})}
 					width="100%"
 					style={{ objectFit: 'contain', maxHeight: 500 }}
 					className={twMerge('rounded-md', 'animate-fade-up')}
 				/>
 			)}
-			{data?.content && <CustomPortableText value={data.content} />}
+			{data?.attributes.content && (
+				<BlocksRenderer content={data.attributes.content} />
+			)}
 		</div>
 	);
 };
