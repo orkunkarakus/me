@@ -132,12 +132,14 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 						}
 					})}
 					width="100%"
-					style={{ objectFit: 'contain', maxHeight: 500 }}
+					style={{ objectFit: 'contain' }}
 					className={twMerge('rounded-md', 'animate-fade-up')}
 				/>
 			)}
 			{data?.attributes.content && (
-				<BlocksRenderer content={data.attributes.content} />
+				<div>
+					<BlocksRenderer content={data.attributes.content} />
+				</div>
 			)}
 		</div>
 	);
