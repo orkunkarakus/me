@@ -12,10 +12,12 @@ export function middleware(request: NextRequest) {
 
 	const requestHeaders = new Headers(request.headers);
 	requestHeaders.set('Authorization', process.env.CMS_API_AUTH_TOKEN as string);
-	const response = NextResponse.next();
 
-	requestHeaders.forEach((value, key) => {
-		response.headers.append(key, value);
+	const response = NextResponse.next({
+		request: {
+			// New request headers
+			headers: requestHeaders
+		}
 	});
 
 	const duration = Date.now() - start;
