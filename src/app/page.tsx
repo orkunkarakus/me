@@ -88,13 +88,14 @@ const Home = () => (
 					'p-2',
 					'px-5',
 					'rounded-lg',
-					'border-gray-300 dark:border-gray-600 hover:border-sky-700',
+					'hover:border-sky-700',
 					'cursor-pointer',
 					'text-gray-600',
 					'hover:text-sky-700',
 					'font-medium',
 					'text-md'
 				)}
+				style={{ color: 'gray', borderColor: 'gray' }}
 			>
 				Blog
 			</span>
