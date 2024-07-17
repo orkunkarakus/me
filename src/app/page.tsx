@@ -88,10 +88,10 @@ const Home = () => (
 					'p-2',
 					'px-5',
 					'rounded-lg',
-					'border-gray-300 dark:border-gray-900 hover:border-sky-700',
+					'border-gray-300 dark:border-[gray] hover:border-sky-700',
 					'cursor-pointer',
 					'text-gray-600',
-					'dark:text-gray-900',
+					'dark:text-[gray]',
 					'hover:text-sky-700',
 					'font-medium',
 					'text-md'
