@@ -5,7 +5,8 @@ import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import qs from 'qs';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Image from '../../../components/Image';
 import fetcher from '../../../utils/fetcher';
 import type { Post } from '../../../types/data';
@@ -138,7 +139,22 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 			)}
 			{data?.attributes.content && (
 				<div>
-					<BlocksRenderer content={data.attributes.content} />
+					<Markdown
+						remarkPlugins={[remarkGfm]}
+						components={{
+							// eslint-disable-next-line react/no-unstable-nested-components
+							img: (props) => (
+								<Image
+									{...props}
+									width="100%"
+									style={{ objectFit: 'contain' }}
+									className={twMerge('rounded-md', 'animate-fade-up')}
+								/>
+							)
+						}}
+					>
+						{data.attributes.content}
+					</Markdown>
 				</div>
 			)}
 		</div>
