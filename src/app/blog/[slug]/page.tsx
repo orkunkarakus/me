@@ -159,14 +159,6 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 									<Image
 										{...props}
 										{...otherProps}
-										srcSet={generateSrcSet({
-											...data.attributes.mainImage.data.attributes.formats,
-											base: {
-												width: data.attributes.mainImage.data.attributes.width,
-												url: data.attributes.mainImage.data.attributes.url,
-												height: data.attributes.mainImage.data.attributes.height
-											}
-										})}
 										width="100%"
 										style={{ objectFit: 'contain' }}
 										className={twMerge('rounded-md', 'animate-fade-up')}
