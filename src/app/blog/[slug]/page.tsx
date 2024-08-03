@@ -12,6 +12,7 @@ import fetcher from '../../../utils/fetcher';
 import type { Post } from '../../../types/data';
 import generateSrcSet from '../../../utils/generateSrcSet';
 import generateImgLinks from '../../../utils/generateImgLinks';
+import isValidURL from '../../../utils/isValidUrl';
 
 const query = (slug: string) =>
 	qs.stringify(
@@ -143,15 +144,35 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 						remarkPlugins={[remarkGfm]}
 						components={{
 							// eslint-disable-next-line react/no-unstable-nested-components
-							img: (props) => (
-								<Image
-									{...props}
-									src={generateImgLinks(props?.src||'')}
-									width="100%"
-									style={{ objectFit: 'contain' }}
-									className={twMerge('rounded-md', 'animate-fade-up')}
-								/>
-							)
+							img: ({ src, ...props }) => {
+								const otherProps = { src };
+								if (src) {
+									const ifImageExternal = isValidURL(src);
+									if (ifImageExternal) {
+										otherProps.src = src;
+									} else {
+										otherProps.src = generateImgLinks(src);
+									}
+								}
+
+								return (
+									<Image
+										{...props}
+										{...otherProps}
+										srcSet={generateSrcSet({
+											...data.attributes.mainImage.data.attributes.formats,
+											base: {
+												width: data.attributes.mainImage.data.attributes.width,
+												url: data.attributes.mainImage.data.attributes.url,
+												height: data.attributes.mainImage.data.attributes.height
+											}
+										})}
+										width="100%"
+										style={{ objectFit: 'contain' }}
+										className={twMerge('rounded-md', 'animate-fade-up')}
+									/>
+								);
+							}
 						}}
 					>
 						{data.attributes.content}
