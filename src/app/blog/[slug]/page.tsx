@@ -146,7 +146,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 							img: (props) => (
 								<Image
 									{...props}
-									src={generateImgLinks(props.src)}
+									src={generateImgLinks(props?.src||'')}
 									width="100%"
 									style={{ objectFit: 'contain' }}
 									className={twMerge('rounded-md', 'animate-fade-up')}
