@@ -70,7 +70,7 @@ const Page = () => {
 						'font-semibold'
 					)}
 				>
-					Şu anlık her hangi bir blog yazısı bulunmamaktadır !
+					Şu anlık bir blog yazısı bulunmamaktadır !
 				</span>
 			)}
 		</div>
