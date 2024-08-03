@@ -37,8 +37,7 @@ const Page = () => {
 					<BlogSkeleton />
 					<BlogSkeleton />
 				</>
-			) : (
-				posts?.data?.length > 0 &&
+			) : posts?.data?.length > 0 ? (
 				posts.data.map((item: Post) => (
 					<BlogItem
 						key={item.id}
@@ -62,6 +61,17 @@ const Page = () => {
 						createdAt={item.attributes.createdAt}
 					/>
 				))
+			) : (
+				<span
+					className={twMerge(
+						'text-md',
+						'dark:text-white',
+						'text-black',
+						'font-semibold'
+					)}
+				>
+					Şu anlık her hangi bir blog yazısı bulunmamaktadır !
+				</span>
 			)}
 		</div>
 	);

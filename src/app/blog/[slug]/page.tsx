@@ -12,7 +12,7 @@ import fetcher from '../../../utils/fetcher';
 import type { Post } from '../../../types/data';
 import generateSrcSet from '../../../utils/generateSrcSet';
 import generateImgLinks from '../../../utils/generateImgLinks';
-import isValidURL from '../../../utils/isValidUrl';
+import isValidURL from '../../../utils/isValidURL';
 
 const query = (slug: string) =>
 	qs.stringify(
