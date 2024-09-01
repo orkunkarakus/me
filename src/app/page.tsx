@@ -15,7 +15,7 @@ const Home = () => (
 	>
 		<Avatar
 			src={ASSETS_SRC.PP}
-			fallback="Orkun Karakuş PP"
+			fallback="Orkun KARAKUŞ PP"
 			radius="full"
 			className={twMerge(
 				'hover:scale-105 transition-transform',
