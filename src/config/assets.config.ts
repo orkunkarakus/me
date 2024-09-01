@@ -1,5 +1,5 @@
 const ASSETS_SRC = {
-	PP: '/assets/pp.JPG'
+	PP: '/assets/pp.webp'
 };
 
 export default ASSETS_SRC;
