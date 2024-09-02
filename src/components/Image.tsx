@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable jsx-a11y/alt-text */
 import { Text } from '@radix-ui/themes';
 import type { ComponentPropsWithoutRef } from 'react';

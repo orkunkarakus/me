@@ -1,85 +1,27 @@
-'use client';
-
 import { twMerge } from 'tailwind-merge';
-import { useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import useSWR from 'swr';
-import qs from 'qs';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { redirect } from 'next/navigation';
+import { getBlogPost } from '../../../api/blog';
 import Image from '../../../components/Image';
-import fetcher from '../../../utils/fetcher';
-import type { Post } from '../../../types/data';
-import generateSrcSet from '../../../utils/generateSrcSet';
-import generateImgLinks from '../../../utils/generateImgLinks';
-import isValidURL from '../../../utils/isValidURL';
+import {
+	generateBlogImgLink,
+	generateCategoryData
+} from '../../../utils/blogUtils';
+import MarkdownRenderer from '../../../components/MarkdownRenderer';
+import DateUtil from '../../../utils/dateUtil';
 
-const query = (slug: string) =>
-	qs.stringify(
-		{
-			filters: {
-				slug: {
-					$eq: slug
-				}
-			},
-			fields: ['title', 'slug', 'createdAt', 'updatedAt', 'content'],
-			populate: {
-				categories: {
-					fields: ['title', 'slug', 'color']
-				},
-				mainImage: {
-					fields: ['alternativeText', 'formats', 'url', 'width', 'height']
-				}
-			}
-		},
-		{
-			encodeValuesOnly: true
-		}
-	);
+const BlogPage = async ({ params }: { params: { slug: string } }) => {
+	const data = getBlogPost(params?.slug);
 
-const BlogPage = ({ params }: { params: { slug: string } }) => {
-	const {
-		data: post,
-		isLoading,
-		error
-	} = useSWR(`/api/posts?${query(params?.slug)}`, fetcher);
-	const { push } = useRouter();
+	if (!data) {
+		redirect('/blog');
 
-	const data = useMemo<Post>(
-		() => (post?.data?.length ? post?.data[0] : undefined),
-		[post]
-	);
-
-	useEffect(() => {
-		if (!isLoading) {
-			if (!data || error) {
-				push('/blog');
-			}
-		}
-	}, [data, error, isLoading, push]);
-
-	if (isLoading || !data) {
-		return (
-			<div className="animate-pulse">
-				<div className="flex flex-col gap-8 items-center">
-					<div className="flex flex-row gap-3 flex-wrap">
-						<span className="bg-gray-200 dark:bg-gray-600 rounded-full h-4 w-24" />
-						<span className="bg-gray-200 dark:bg-gray-600 rounded-full h-4 w-24" />
-					</div>
-					<span className="bg-gray-200 dark:bg-gray-600 h-6 my-4 rounded-full w-full" />
-					<span className="bg-gray-200 dark:bg-gray-600 w-1/6 h-4 rounded-full" />
-					<div className="bg-gray-200 dark:bg-gray-600 rounded w-full h-64 my-4" />
-					<div className="bg-gray-200 dark:bg-gray-600 w-full h-4 rounded-full" />
-					<div className="bg-gray-200 dark:bg-gray-600 w-full h-4 rounded-full" />
-				</div>
-			</div>
-		);
+		return <div />;
 	}
 
 	return (
 		<div className={twMerge('flex', 'flex-col', 'gap-4', 'items-center')}>
 			<div className={twMerge('flex', 'flex-row', 'gap-3', 'flex-wrap')}>
-				{data.attributes.categories.data.map((cat) => (
+				{generateCategoryData(data.metadata.categories).map((cat) => (
 					<span
 						className={twMerge(
 							'text-md',
@@ -89,10 +31,10 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 							'whitespace-nowrap',
 							'animate-fade-in'
 						)}
-						key={cat.attributes.slug}
-						style={{ color: cat.attributes.color }}
+						key={cat.slug}
+						style={{ color: cat.color }}
 					>
-						{cat.attributes.title}
+						{cat.title}
 					</span>
 				))}
 			</div>
@@ -106,7 +48,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 					'animate-fade-up'
 				)}
 			>
-				{data.attributes.title}
+				{data.metadata.title}
 			</h1>
 			<span
 				className={twMerge(
@@ -116,59 +58,20 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 					'animate-fade-in'
 				)}
 			>
-				{new Date(data.attributes.createdAt as string).toLocaleDateString()}
+				{data.metadata.publishedAt &&
+					DateUtil.parseDate(data.metadata.publishedAt)}
 			</span>
-			{data.attributes?.mainImage && (
+			{data.metadata.image && (
 				<Image
-					alt={
-						data.attributes?.mainImage.data.attributes.alternativeText ||
-						`${data.id}-img`
-					}
-					src={generateImgLinks(data.attributes.mainImage.data.attributes.url)}
-					srcSet={generateSrcSet({
-						...data.attributes.mainImage.data.attributes.formats,
-						base: {
-							width: data.attributes.mainImage.data.attributes.width,
-							url: data.attributes.mainImage.data.attributes.url,
-							height: data.attributes.mainImage.data.attributes.height
-						}
-					})}
+					src={generateBlogImgLink(data.metadata.image)}
 					width="100%"
 					style={{ objectFit: 'contain' }}
 					className={twMerge('rounded-md', 'animate-fade-up')}
 				/>
 			)}
-			{data?.attributes.content && (
+			{data?.content && (
 				<div>
-					<Markdown
-						remarkPlugins={[remarkGfm]}
-						components={{
-							// eslint-disable-next-line react/no-unstable-nested-components
-							img: ({ src, ...props }) => {
-								const otherProps = { src };
-								if (src) {
-									const ifImageExternal = isValidURL(src);
-									if (ifImageExternal) {
-										otherProps.src = src;
-									} else {
-										otherProps.src = generateImgLinks(src);
-									}
-								}
-
-								return (
-									<Image
-										{...props}
-										{...otherProps}
-										width="100%"
-										style={{ objectFit: 'contain' }}
-										className={twMerge('rounded-md', 'animate-fade-up')}
-									/>
-								);
-							}
-						}}
-					>
-						{data.attributes.content}
-					</Markdown>
+					<MarkdownRenderer source={data.content} />
 				</div>
 			)}
 		</div>
