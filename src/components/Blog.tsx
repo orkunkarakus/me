@@ -2,17 +2,16 @@
 
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Category } from '../types/data';
+import DateUtil from '../utils/dateUtil';
 
 type Props = {
 	id: number | string;
 	title: string;
 	createdAt: string;
 	slug: string;
-	img: {
-		base: string;
-		srcSet: string;
-	};
+	img: string;
 	categories: Category[];
 };
 
@@ -31,20 +30,21 @@ const BlogItem = (props: Props) => {
 				)}
 			>
 				{img && (
-					<img
-						alt={`${id}-img`}
-						src={img.base}
-						width="100%"
-						style={{ objectFit: 'cover', height: 260 }}
-						className={twMerge(
-							'hover:scale-102',
-							'rounded-md',
-							'transition',
-							'ease-in-out',
-							'duration-300'
-						)}
-						srcSet={img.srcSet}
-					/>
+					<div className={twMerge('h-[260px]', 'relative')}>
+						<Image
+							alt={`${id}-img`}
+							src={img}
+							fill
+							objectFit="cover"
+							className={twMerge(
+								'hover:scale-102',
+								'rounded-md',
+								'transition',
+								'ease-in-out',
+								'duration-300'
+							)}
+						/>
+					</div>
 				)}
 				<div
 					className={twMerge('flex', 'flex-row', 'gap-3', 'flex-wrap', 'mt-1')}
@@ -58,10 +58,10 @@ const BlogItem = (props: Props) => {
 								'font-semibold',
 								'whitespace-nowrap'
 							)}
-							key={cat.attributes.slug}
-							style={{ color: cat.attributes.color }}
+							key={cat.slug}
+							style={{ color: cat.color }}
 						>
-							{cat.attributes.title}
+							{cat.title}
 						</span>
 					))}
 				</div>
@@ -78,7 +78,7 @@ const BlogItem = (props: Props) => {
 				<span
 					className={twMerge('text-sm', 'dark:text-gray-600', 'text-gray-400')}
 				>
-					{new Date(createdAt).toLocaleDateString()}
+					{DateUtil.parseDate(createdAt)}
 				</span>
 			</div>
 		</Link>

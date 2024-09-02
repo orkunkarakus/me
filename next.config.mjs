@@ -1,24 +1,20 @@
 /** @type {import('next').NextConfig} */
-
-const rewrites = async () => [
-    {
-      source: '/api/:path*',
-      destination: `${process.env.CMS_URI}/api/:path*`
-    },
-    {
-      source: '/content/public/:path*',
-      destination: `${process.env.CMS_URI}/uploads/:path*`
-    }
-  ];
+import createMDX from '@next/mdx'
 
   const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
-    rewrites,
     i18n: {
       locales: ['tr-TR'],
       defaultLocale: 'tr-TR'
-    }
+    },
+    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    transpilePackages: ['next-mdx-remote']
   };
 
-  export default nextConfig;
+  const withMDX = createMDX({
+    // Add markdown plugins here, as desired
+  })
+   
+  // Merge MDX config with Next.js config
+  export default withMDX(nextConfig)
