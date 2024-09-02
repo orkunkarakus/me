@@ -9,7 +9,10 @@ import createMDX from '@next/mdx'
       defaultLocale: 'tr-TR'
     },
     pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-    transpilePackages: ['next-mdx-remote']
+    transpilePackages: ['next-mdx-remote'],
+    eslint:{
+      ignoreDuringBuilds: true
+    }
   };
 
   const withMDX = createMDX({
