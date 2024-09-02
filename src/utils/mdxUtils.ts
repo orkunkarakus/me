@@ -3,14 +3,13 @@
 import fs from 'fs';
 import path from 'path';
 
-import * as matter from 'gray-matter';
-import type { Categories } from '../types/const';
+import matter from 'gray-matter';
 
 type Metadata = {
 	title: string;
 	publishedAt: string;
 	image?: string;
-	categories: Categories[];
+	categories: string[];
 };
 
 function parseFrontmatter(fileContent: string) {
