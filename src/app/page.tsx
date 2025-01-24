@@ -80,7 +80,7 @@ const Home = () => (
 				</Link>
 			))}
 		</Flex>
-		<a href="/blog" className={twMerge('hover:scale-105', 'animate-scale-in')}>
+		{/* <a href="/blog" className={twMerge('hover:scale-105', 'animate-scale-in')}>
 			<span
 				className={twMerge(
 					'border-dashed',
@@ -99,7 +99,7 @@ const Home = () => (
 			>
 				Blog
 			</span>
-		</a>
+		</a> */}
 	</Flex>
 );
 
