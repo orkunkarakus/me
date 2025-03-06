@@ -48,7 +48,7 @@ const Home = () => (
 				)}
 				color="gray"
 			>
-				Software Developer
+				Software Engineer
 			</Text>
 		</Flex>
 		<Text
@@ -60,7 +60,7 @@ const Home = () => (
 			)}
 			color="gray"
 		>
-			A full stack software developer who gets his motivation from his work and
+			A software engineer who gets his motivation from his work and
 			principles.
 		</Text>
 		<Flex direction="row" gap="5" className={twMerge('animate-fade-down')}>

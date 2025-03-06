@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'Orkun KARAKUŞ',
-	description: 'A software developer | Orkun KARAKUŞ'
+	description: 'Software Engineer | Orkun KARAKUŞ'
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
